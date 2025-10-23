@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>GoTogether — Post Ride</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.8/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js"></script>
+</head>
+<body class="page-center">
+  <main class="container">
+    <h2 class="gradient-text" style="margin:0 0 6px 0">Post a Ride</h2>
+    <div class="small" style="margin-bottom:14px">Drivers share daily routes and available seats</div>
+
+    <div class="form-grid" style="width:100%;margin-bottom:12px">
+      <input id="driverName" type="text" placeholder="Your full name" />
+      <input id="vehicle" type="text" placeholder="Vehicle (model/number)" />
+      <input id="contact" type="text" placeholder="Contact (phone/email)" />
+      <input id="pickup" type="text" placeholder="Pickup (text)" />
+      <input id="dest" type="text" placeholder="Destination (text)" />
+      <!-- datetime-local gives date + time in one control; user asked for time enhancements -->
+      <input id="time" type="datetime-local" placeholder="Departure date & time" />
+      <input id="seatsAvailable" type="number" placeholder="Seats available" min="1" />
+      <input id="notes" class="full" type="text" placeholder="Notes (optional)" />
+    </div>
+
+    <div style="display:flex;gap:12px;justify-content:center">
+      <button id="postBtn" class="btn btn-gradient">Post Ride</button>
+      <a class="btn btn-secondary" href="index.html">Back</a>
+    </div>
+
+    <div class="footer" style="margin-top:14px">Tip: Bookers will see your contact in their booking list.</div>
+  </main>
+
+  <script>
+    document.getElementById('postBtn').addEventListener('click', async () => {
+      const payload = {
+        driverName: document.getElementById('driverName').value.trim(),
+        vehicle: document.getElementById('vehicle').value.trim(),
+        contact: document.getElementById('contact').value.trim(),
+        pickup: document.getElementById('pickup').value.trim(),
+        dest: document.getElementById('dest').value.trim(),
+        time: document.getElementById('time').value || '',
+        seatsAvailable: Number(document.getElementById('seatsAvailable').value) || 1,
+        notes: document.getElementById('notes').value.trim()
+      };
+      if (!payload.driverName || !payload.pickup || !payload.dest) {
+        return showToast('Please provide your name, pickup and destination.');
+      }
+      try {
+        const res = await postRideApi(payload);
+        if (res.ok) {
+          showToast('Ride posted successfully');
+          window.location.href = 'index.html';
+        } else {
+          const j = await res.json();
+          showToast('Error: ' + (j.error || res.statusText));
+        }
+      } catch (err) {
+        showToast('Failed: ' + err.message);
+      }
+    });
+  </script>
+</body>
+</html>

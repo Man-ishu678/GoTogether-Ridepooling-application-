@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>GoTogether — Book Ride</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.8/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js"></script>
+</head>
+<body class="page-center">
+  <main class="container">
+    <h2 class="gradient-text" style="margin:0 0 6px 0">Search & Book Rides</h2>
+    <div class="small" style="margin-bottom:14px">Search by pickup/destination; click Request to book.</div>
+
+    <div style="width:100%; display:flex; gap:8px; margin-bottom:12px;">
+      <input id="searchPickup" type="text" placeholder="Pickup (e.g. MG Road)" />
+      <input id="searchDest" type="text" placeholder="Destination (e.g. Hitech City)" />
+      <button id="searchBtn" class="btn btn-gradient">Search</button>
+      <button id="seedBtn" class="btn btn-secondary">Seed Demo</button>
+      <a class="btn btn-secondary" href="index.html">Back</a>
+    </div>
+
+    <div style="width:100%; margin-bottom:10px">
+      <div class="small">Available rides</div>
+      <div id="ridesList" class="list" style="margin-top:8px"></div>
+    </div>
+
+    <div style="width:100%">
+      <div class="small">Your bookings</div>
+      <div id="bookingsList" class="list" style="margin-top:8px"></div>
+    </div>
+  </main>
+
+  <script>
+    const ridesList = document.getElementById('ridesList');
+    const bookingsList = document.getElementById('bookingsList');
+    document.getElementById('searchBtn').addEventListener('click', async () => { await loadRides(); });
+    document.getElementById('seedBtn').addEventListener('click', async () => { await seedDemo(); await loadRides(); });
+
+    async function loadRides(){
+      ridesList.innerHTML = '<div class="small">Loading…</div>';
+      const pickup = document.getElementById('searchPickup').value.trim();
+      const dest = document.getElementById('searchDest').value.trim();
+      try {
+        const rides = await getRidesApi(pickup, dest);
+        if (!Array.isArray(rides) || rides.length === 0) {
+          ridesList.innerHTML = '<div class="small">No rides found.</div>';
+          bookingsList.innerHTML = '';
+          return;
+        }
+        ridesList.innerHTML = '';
+        rides.forEach(r => {
+          const tile = document.createElement('div');
+          tile.className = 'ride-tile';
+          const initials = (r.driverName||'').split(' ').map(s=>s[0]).slice(0,2).join('');
+          tile.innerHTML = `
+            <div style="display:flex;gap:12px;align-items:center">
+              <div class="avatar">${escapeHtml(initials)}</div>
+              <div>
+                <div style="font-weight:700">${escapeHtml(r.driverName)} — ${escapeHtml(r.vehicle||'')}</div>
+                <div class="small">${escapeHtml(r.pickup)} → ${escapeHtml(r.dest)} · ${r.time || '-'}</div>
+                <div class="small">Seats: ${r.seatsAvailable}</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <button class="btn btn-gradient" onclick="requestSeat('${r._id}')">Request Seat</button>
+            </div>
+          `;
+          ridesList.appendChild(tile);
+        });
+        await loadBookings();
+      } catch (err) {
+        ridesList.innerHTML = '<div class="small">Failed to load rides</div>';
+      }
+    }
+
+    async function loadBookings(){
+      bookingsList.innerHTML = '<div class="small">Loading…</div>';
+      try {
+        const b = await getBookingsApi();
+        if (!Array.isArray(b) || b.length === 0) {
+          bookingsList.innerHTML = '<div class="small">No bookings yet.</div>';
+          return;
+        }
+        bookingsList.innerHTML = '';
+        b.forEach(item => {
+          const node = document.createElement('div');
+          node.className = 'card';
+          const ride = item.rideId || {};
+          node.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div style="font-weight:700">${escapeHtml(item.riderName)}</div>
+              <div class="small">Ride: ${escapeHtml(ride.pickup || 'N/A')} → ${escapeHtml(ride.dest || 'N/A')}</div>
+            </div>
+            <div class="small">Driver contact: ${escapeHtml(ride.contact || '—')}</div>
+          </div>`;
+          bookingsList.appendChild(node);
+        });
+      } catch (err) {
+        bookingsList.innerHTML = '<div class="small">Failed to load bookings</div>';
+      }
+    }
+
+    async function requestSeat(rideId){
+      const riderName = prompt('Your name');
+      if (!riderName) return;
+      const riderContact = prompt('Contact (phone/email)');
+      if (!riderContact) return;
+      try {
+        const res = await postBookingApi({ rideId, riderName, riderContact });
+        if (res.ok) {
+          showToast('Booking successful — check Your bookings');
+          await loadRides();
+        } else {
+          const j = await res.json();
+          showToast('Error: ' + (j.error || res.statusText));
+        }
+      } catch (err) {
+        showToast('Booking failed: ' + err.message);
+      }
+    }
+
+    // initial load
+    (async function init(){ await loadRides(); })();
+  </script>
+</body>
+</html>
