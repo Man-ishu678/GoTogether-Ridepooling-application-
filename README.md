@@ -23,7 +23,7 @@ A modern and intuitive web application built using **Node.js + Express** (backen
 
 ### 🏠 Landing Page
 
-![Landing Page](screenshots/landing_page.png)
+![Landing Page](screenshorts/landing_page.png)
 
 * Big centered logo
 * Two buttons: **Book a Ride** | **Post a Ride**
@@ -31,7 +31,7 @@ A modern and intuitive web application built using **Node.js + Express** (backen
 
 ### 🚕 Book Ride Page
 
-![Book Ride Page](screenshots/book_ride_page.png)
+![Book Ride Page](screenshorts/book_ride_page.png)
 
 * Fields: Pickup, Destination, Date, Time
 * Search functionality
@@ -39,7 +39,7 @@ A modern and intuitive web application built using **Node.js + Express** (backen
 
 ### 🚘 Post Ride Page
 
-![Post Ride Page](screenshots/post_ride_page.png)
+![Post Ride Page](screenshorts/post_ride_page.png)
 
 * Fields: Start, Destination, Date, Time, Seats
 * Submit ride form
