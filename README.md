@@ -103,7 +103,7 @@ Server will run at 👉 **[http://localhost:3000](http://localhost:3000)**
 
 **Manish Kumar**
 *Passionate developer in AI, Full Stack, and Software Development.*
-*live:* *[https://go-together-ridepooling-application.vercel.app/](https://go-together-ridepooling-application.vercel.app/)*
+*live: [https://go-together-ridepooling-application.vercel.app/](https://go-together-ridepooling-application.vercel.app/)
 
 ---
 
