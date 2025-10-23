@@ -76,7 +76,7 @@ npm install
 npm start
 ```
 
-Server will run at 👉 **[http://localhost:3000](http://localhost:3000)**
+Server will run at 👉 **[http://localhost:4000/book.html](http://localhost:4000/book.html)**
 
 ---
 
