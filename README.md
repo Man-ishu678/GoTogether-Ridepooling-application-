@@ -19,7 +19,6 @@ A modern and intuitive web application built using **Node.js + Express** (backen
 
 ## 📸 **UI Screenshots**
 
-> *(Replace placeholders with actual screenshots after running the app)*
 
 ### 🏠 Landing Page
 
@@ -104,7 +103,7 @@ Server will run at 👉 **[http://localhost:3000](http://localhost:3000)**
 
 **Manish Kumar**
 *Passionate developer in AI, Full Stack, and Software Development.*
-
+*live:* [https://go-together-ridepooling-application.vercel.app/](https://go-together-ridepooling-application.vercel.app/)
 ---
 
 ## ❤️ Contribution & Feedback
