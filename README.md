@@ -101,9 +101,11 @@ Server will run at 👉 **[http://localhost:3000](http://localhost:3000)**
 
 ## 👨‍💻 Author
 
-**Manish Kumar**
-*Passionate developer in AI, Full Stack, and Software Development.*
-*live: [https://go-together-ridepooling-application.vercel.app/](https://go-together-ridepooling-application.vercel.app/)
+# **Manish Kumar**
+
+**Passionate Developer in AI, Full Stack, and Software Development**
+
+🌐 **Live Demo:** [Go Together – Ridepooling Application](https://go-together-ridepooling-application.vercel.app/)
 
 ---
 
